@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2009 Hubert Lepicki <hubert.lepicki@amberbit.com>
+# Copyright (c) 2009 Hubert Lepicki <hubert.lepicki@gmail.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -22,10 +22,9 @@
 #++
 
 require 'rack'
-require 'pp'
 
 # This class is piece of Rack middleware that filters responses from your
-# app and finds {{{ get /some/relative/url }}} or {{{ xhrget /some/ajax/url }}}
+# app and finds <get>/some/relative/url</get> or <xhrget>/some/ajax/url</xhrget>
 # and substitutes them with appropriate responses returned by your app.
 # This can be useful if you want to assemble single page with responses returned
 # by many controllers for example.
@@ -38,7 +37,9 @@ class Rack::ResponseAssembler
   # In Rails you could use:
   # config.middleware.use "Rack::ResponseAssembler", "Yo! Can't load parts!", ["text/html"]
   # to change error message and content types array that filter gets run on.
-  def initialize(app, error_message = "<p>Part loading failed...</p>", content_types = ["text/html", "text/xhtml", "text/css", "text/csv", "text/plain"])
+  def initialize(app, 
+                 error_message = "<p>Loading failed...</p>",
+                 content_types = ["text/html", "text/xhtml", "text/css", "text/csv", "text/plain"])
     @app = app
     @content_types = content_types
     @error_message = error_message
@@ -47,24 +48,25 @@ class Rack::ResponseAssembler
   def call(env)
     @original_env = env.clone
     
-    # First, let's get response from app/rack-cache for user request and return it if not text
     status, headers, response = @app.call(env)
     return [status, headers, response] unless is_allowed_content_type(headers["Content-Type"].to_s)
 
     response = join_response(response) # merge it into one String
 
-    # Now, let's look for {{{ get /url }}} tags and assemble full page to send out
+    # Now, let's look for <get>/url</get> tags and assemble full page to send out
     response = assemble_from_parts(response)
     headers["Content-Length"] = response.length.to_s
     [status, headers, response]
   end
 
+  private
+  
   def assemble_from_parts(resp_body)
-    resp_body.gsub(/(\{\{\{)( *)(get|xhrget)( +)(.*)( *)(\}\}\})/) {
-      if $3 == "get"
-        assemble_from_parts(get($5))
+    resp_body.gsub(/(<get>|<xhrget>)(.*?)(<\/get>|<\/xhrget>)/) {
+      if $1 == "<get>"
+        assemble_from_parts(get($2))
       else
-        assemble_from_parts(get($5, true))
+        assemble_from_parts(get($2, true))
       end
     }
   end  
