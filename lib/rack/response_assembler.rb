@@ -55,7 +55,7 @@ class Rack::ResponseAssembler
 
     # Now, let's look for <get>/url</get> tags and assemble full page to send out
     response = assemble_from_parts(response)
-    headers["Content-Length"] = response.length.to_s
+    headers["Content-Length"] = response.length.to_s # is String at this point
     [status, headers, response]
   end
 
