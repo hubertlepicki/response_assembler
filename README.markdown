@@ -7,6 +7,9 @@ ResponseAssembler can be used with Rack-Cache. For example, you might want to st
 
 This module will never be as big and proffesional as ESI. On the other hand, we do not assume your response is HTML/XML (or a valid one only), so you can use ResponseAssembler with CSS, JavaScript, text or CSV files. Please look at example to find out how to specify response mime types that ResponseAssembler should parse. You might want to have a look at [Christoffer Sawicki's Rack::ESI module](http://github.com/Qerub/rack-esi/tree/master) for alternative, but at time of writing this, it's not complete yet.
 
+This is a continuation of Amberbit's Rack::ResponseAssembler and will be merged with it in future. It breaks backward-compatability by using XML-like syntax instead of custom tags.
+Will be merged with Amberbit's branch when backward-compatability option is added.
+
 
 Usage
 =====
@@ -25,11 +28,11 @@ To enable Rack::ResponseAssembler, plact this line into your environment.rb:
 
 Now, you don't have to change your PostsController::index action at all, just edit it's view template to return something like:
 
-    {{{ get /menu }}}
-    {{{ get /sidebar }}}
+    <get>/menu</get>
+    <get>/sidebar</get>
     <h1><%= @post.title %></h1>
     <p><%= @post.body %></p>
-    {{{ get <%= post_comments_path @post %> }}} // this is /posts/1/comments for example where your comments controller sits
+    <get><%= post_comments_path @post %></get> // this is /posts/1/comments for example where your comments controller sits
 
 You can see that your response will include what /menu /sidebar and /posts/1/comments returns.
 
@@ -53,11 +56,13 @@ and if you want to filter, say - only text/css files for inclusions, use array o
 TODO:
 =====
 
-* write some tests
-* write example (Sinatra? Rails?) application
+* remove trailing and leading whitespaces from <get>    /something   </get>
+* create separate module, don't use Rack:: (?)
+* support {{{ xhrget /something }}} as backward compatability option or allow users to define their own tags to be used
 
 Bugs, feature requests, donations etc.
 ======================================
 
-Any bugs, feature requests and other related stuff can be sent to me either usine email hubert.lepicki@amberbit.com or via GitHub message (amberbit). We are happy to receive donations or get hired by you, visit [http://www.amberbit.com](http://www.amberbit.com) for details (no, seriously! ;).
+Any bugs, feature requests and other related stuff can be sent to me either usine email hubert.lepicki@gmail.com or via GitHub message (hubertlepicki).
+We are happy to receive donations or get hired by you, visit [http://www.amberbit.com](http://www.amberbit.com) for details (no, seriously! ;).
 
