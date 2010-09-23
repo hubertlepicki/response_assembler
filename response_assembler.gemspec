@@ -17,11 +17,17 @@ Gem::Specification.new do |s|
      "README.markdown"
   ]
   s.files = [
-    ".gitignore",
+    ".document",
+     ".gitignore",
      "Gemfile",
      "Gemfile.lock",
+     "LICENSE",
      "README.markdown",
+     "Rakefile",
+     "VERSION",
+     "lib/response_assembler.rb",
      "lib/response_assembler/middleware.rb",
+     "response_assembler.gemspec",
      "spec/response_assembler_spec.rb",
      "spec/testapp.rb"
   ]
