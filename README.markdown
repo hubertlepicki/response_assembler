@@ -7,18 +7,24 @@ ResponseAssembler can be used with Rack-Cache. For example, you might want to st
 
 You can use ResponseAssembler with CSS, JavaScript, text or CSV files. Please look at example to find out how to specify response mime types that ResponseAssembler should parse.
 
+Installation
+============
+
+Add this to Gemfile:
+
+    gem "response_assembler"
+
+and run:
+
+    $ bundle install
+
 Usage
 =====
-
-Example of using middleware module
-----------------------------------
 
 Say, you want to render single Post (/posts/1), and add extra menu, sidebar and comments boxes.
 I assume you are using Rails.
 
-First you need to download response_assembler.rb and place it into lib/rack/ directory under your RAILS_ROOT (create it if it's not there).
-
-To enable ResponseAssembler::Middleware, plact this line into your environment.rb:
+To enable ResponseAssembler::Middleware, plact this line into your config/application.rb:
     
     config.middleware.use "ResponseAssembler::Middleware"
 
