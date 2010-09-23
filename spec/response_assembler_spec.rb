@@ -1,19 +1,18 @@
-require 'lib/rack/response_assembler'  # <-- your sinatra app
-require 'spec'
-require 'rack/test'
+require File.join(File.dirname(__FILE__), "..", "lib", "response_assembler", "middleware")
+Bundler.require
 require 'testapp'
 
-describe "Rack::ResponseAssembler" do
+describe "ResponseAssembler::Middleware" do
   include Rack::Test::Methods
 
   def app
-    Rack::ResponseAssembler.new(TestApp.new, "Oh, no!")
+    ResponseAssembler::Middleware.new(TestApp.new, "Oh, no!")
   end
 
   it "pass response returned by application when no recognized tags were found" do
     get '/'
     last_response.should be_ok
-    last_response.body.should == 'Hello World'
+    last_response.body.should eql('Hello World')
   end
  
   it "renders response1 on /response1" do
