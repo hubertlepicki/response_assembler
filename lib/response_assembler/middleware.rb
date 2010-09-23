@@ -79,7 +79,7 @@ module ResponseAssembler
       
       status, headers, response = @app.call(env)
       return response if status == 200
-      @error_message 
+      [@error_message] 
     end
 
     def is_allowed_content_type(content_type)
