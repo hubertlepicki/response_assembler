@@ -59,7 +59,7 @@ module ResponseAssembler
     private
     
     def assemble_from_parts(resp_body)
-      resp_body.join("").gsub(/(<get>|<xhrget>)(.*?)(<\/get>|<\/xhrget>)/) do
+      join_response(resp_body).gsub(/(<get>|<xhrget>)(.*?)(<\/get>|<\/xhrget>)/) do
         assemble_from_parts(get($2, $1 != "<get>"))
       end 
     end  
@@ -85,6 +85,12 @@ module ResponseAssembler
     def is_allowed_content_type(content_type)
       @content_types.each { |type| return true if content_type =~ Regexp.new(type) }
       false
+    end
+
+    def join_response(resp)
+      joined = ""
+      resp.each { |element| joined += element }
+      joined
     end
   end
 end
